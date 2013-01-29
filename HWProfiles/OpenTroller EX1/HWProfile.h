@@ -1,24 +1,38 @@
 /*
-BrewTroller 4.0 Lite Hardware Configuration
+OpenTroller EX1 Hardware Configuration
 */
 
 #ifndef BT_HWPROFILE
 #define BT_HWPROFILE
   #include "Config.h"
   
+  //**********************************************************************************
+  // ENCODER TYPE
+  //**********************************************************************************
+  // You must uncomment one and only one of the following ENCODER_ definitions
+  // Use ENCODER_ALPS for ALPS and Panasonic Encoders
+  // Use ENCODER_CUI for older CUI encoders
+  //
+  //#define ENCODER_TYPE ALPS
+  #define ENCODER_TYPE CUI
+  //**********************************************************************************
+
   #define ENCA_PIN 3
   #define ENCB_PIN 2
   #define ENTER_PIN 1
+  #define ENCODER_ACTIVELOW
   
   #define PVOUT_TYPE_GPIO
-  #define PVOUT_COUNT 6 //6 Outputs
+  #define PVOUT_COUNT 7 //7 Outputs
 
   #define VALVE1_PIN 22 //OUT1
-  #define VALVE2_PIN 21 //OUT2
-  #define VALVE3_PIN 20 //OUT3
-  #define VALVE4_PIN 19 //OUT4
-  #define VALVE5_PIN 18 //OUT5
-  #define VALVE6_PIN 15 //OUT6
+  #define VALVE2_PIN 15 //OUT2
+  #define VALVE3_PIN 21 //OUT3
+  #define VALVE4_PIN 18 //OUT4
+  #define VALVE5_PIN 20 //OUT5
+  #define VALVE6_PIN 19 //OUT6
+  #define VALVE7_PIN 27 //ALARM
+
   
   #define HEARTBEAT
   #define HEARTBEAT_PIN 0
@@ -34,6 +48,8 @@ BrewTroller 4.0 Lite Hardware Configuration
   #define UI_DISPLAY_SETUP
   #define LCD_BRIGHT_PIN 13
   #define LCD_CONTRAST_PIN 14
+  #define LCD_DEFAULT_CONTRAST 100
+  #define LCD_DEFAULT_BRIGHTNESS 255
 
   
 //**********************************************************************************
