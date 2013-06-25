@@ -242,7 +242,7 @@ void initEEPROM() {
   }
   
   //Set default LCD Bright/Contrast
-  #if defined(__AVR_ATmega1284P__) || defined(__AVR_ATmega1284__)
+  #if (defined __AVR_ATmega1284P__ || defined __AVR_ATmega1284__) && defined UI_DISPLAY_SETUP && defined UI_LCD_4BIT
     EEPROM.write(2048, LCD_DEFAULT_BRIGHTNESS);
     EEPROM.write(2049, LCD_DEFAULT_CONTRAST);
   #endif
