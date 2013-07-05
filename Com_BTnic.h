@@ -327,14 +327,13 @@ void BTnic::execCmd(void) {
       logFieldI(vlvConfig[cmdIndex]);  
       break; 
 
-/*
     case CMD_SET_ALARM:  //V
-      setAlarm(getCmdParamNum(1));
+      alarmStatus[cmdIndex] = getCmdParamNum(1);
     case CMD_GET_ALARM:  //e
-      logFieldCmd(CMD_GET_ALARM, NO_CMDINDEX);
-      logFieldI(alarmStatus);
+      logFieldCmd(CMD_GET_ALARM, cmdIndex);
+      logFieldI(alarmStatus[cmdIndex]);
       break;
-*/
+
     case CMD_SET_ZONENAME:  //f
       {
         char zName[20];
