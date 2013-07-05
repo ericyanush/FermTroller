@@ -61,6 +61,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   #define CMD_RESET		99 	//c
   #define CMD_GET_VLVCFG	100 	//d
   #define CMD_GET_ALARM		101 	//e
+  #define CMD_GET_ZONENAME	102	//f
+  #define CMD_SET_ZONENAME	103	//g
   #define CMD_TEMP		113 	//q
   #define CMD_ZONEPWR    	115 	//s
   #define CMD_SETPOINT		116 	//t
@@ -113,8 +115,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
     0,	//CMD_RESET
     0,	//CMD_GET_VLVCFG
     0,	//CMD_GET_ALARM
-    0,	  //Not Used
-    0,	  //Not Used
+    0,	//CMD_GET_ZONENAME
+    1,	//CMD_SET_ZONENAME
     0,	  //Not Used
     0,	  //Not Used
     0,	  //Not Used
@@ -169,8 +171,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
     1, 			//CMD_RESET
     NUM_VLVCFGS - 1, 	//CMD_GET_VLVCFG
     NUM_ZONES - 1, 	//CMD_GET_ALARM
-    0, 			  //Not Used
-    0, 			  //Not Used
+    NUM_ZONES - 1,	//CMD_GET_ZONENAME
+    NUM_ZONES - 1,	//CMD_SET_ZONENAME
     0, 			  //Not Used
     0, 			  //Not Used
     0, 			  //Not Used
@@ -333,6 +335,20 @@ void BTnic::execCmd(void) {
       logFieldI(alarmStatus);
       break;
 */
+    case CMD_SET_ZONENAME:  //f
+      {
+        char zName[20];
+        getCmdParam(1, zName, 19);
+        setZoneName(cmdIndex, zName);
+      }
+    case CMD_GET_ZONENAME:  //g
+      logFieldCmd(CMD_GET_ZONENAME, cmdIndex);
+      {
+        char zName[20];
+        getZoneName(cmdIndex, zName);
+        logField(zName);
+      }
+      break;
       
     case CMD_SET_SETPOINT:  //X
       setSetpoint(cmdIndex, getCmdParamNum(1));
