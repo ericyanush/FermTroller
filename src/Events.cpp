@@ -24,10 +24,12 @@ Hardware Lead: Jeremiah Dillingham (jeremiah_AT_brewtroller_DOT_com)
 Documentation, Forums and more information available at http://www.brewtroller.com
 */
 
+#include <stdint.h>
+#include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
 
-void eventHandler(byte eventID, int eventParam) {
+void eventHandler(uint8_t eventID, int eventParam) {
   //Global Event handler
   if (eventID == EVENT_ALARM_TSENSOR) {
     if (millis() < ALARM_BOOTUP_DELAY) return;

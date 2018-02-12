@@ -97,7 +97,7 @@ void(* softReset) (void) = 0;
 #endif
 
 //8-byte Temperature Sensor Address for each zone
-byte tSensor[NUM_ZONES][8];
+uint8_t tSensor[NUM_ZONES][8];
 int temp[NUM_ZONES];
 
 //Create the appropriate 'LCD' object for the hardware configuration (4-Bit GPIO, I2C)
@@ -117,10 +117,10 @@ int temp[NUM_ZONES];
 
 //Valve Variables
 unsigned long vlvConfig[NUM_VLVCFGS], actHeats, actCools;
-boolean buzzStatus;
-byte alarmStatus[NUM_ZONES];
+bool buzzStatus;
+uint8_t alarmStatus[NUM_ZONES];
 unsigned long coolTime[NUM_ZONES];
-byte coolMinOn[NUM_ZONES], coolMinOff[NUM_ZONES]; //Minimum On/Off time for coolOutput in minutes
+uint8_t coolMinOn[NUM_ZONES], coolMinOff[NUM_ZONES]; //Minimum On/Off time for coolOutput in minutes
 
 //Create the appropriate 'Valves' object for the hardware configuration (GPIO, MUX, MODBUS)
 #if defined PVOUT_TYPE_GPIO

@@ -24,6 +24,8 @@ Hardware Lead: Jeremiah Dillingham (jeremiah_AT_brewtroller_DOT_com)
 Documentation, Forums and more information available at http://www.brewtroller.com
 */
 
+#include "FermTroller.h"
+#include "EEPROM.h"
 #include "Config.h"
 #include "Enum.h"
 #include <avr/eeprom.h>
@@ -278,14 +280,14 @@ void PROMwriteInt(int address, int value) {
   eeprom_write_block((void *) &value, (unsigned char *) address, 2);
 }
 
-void PROMwriteBytes(int addr, byte bytes[], byte numBytes) {
-  for (byte i = 0; i < numBytes; i++) {
+void PROMwriteBytes(int addr, uint8_t bytes[], uint8_t numBytes) {
+  for (uint8_t i = 0; i < numBytes; i++) {
     EEPROM.write(addr + i, bytes[i]);
   }
 }
 
-void PROMreadBytes(int addr, byte bytes[], byte numBytes) {
-  for (byte i = 0; i < numBytes; i++) {
+void PROMreadBytes(int addr, uint8_t bytes[], uint8_t numBytes) {
+  for (uint8_t i = 0; i < numBytes; i++) {
     bytes[i] = EEPROM.read(addr + i);
   }
 }

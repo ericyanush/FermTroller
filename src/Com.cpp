@@ -28,6 +28,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 //**********************************************************************************
 //Code Shared by all Schemas
 //**********************************************************************************
+#include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
 
