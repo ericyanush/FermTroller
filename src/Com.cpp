@@ -33,7 +33,9 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "Enum.h"
 #include "FermTroller.h"
 #include "Com.h"
+#include "Com_S0ASC.h"
 #include <Wire.h>
+#include "Com_BTnic.h"
 
 void comInit() {
   #ifdef COM_SERIAL0

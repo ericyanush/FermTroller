@@ -11,11 +11,15 @@
 #endif
 
 extern uint8_t tSensor[NUM_ZONES][8];
+extern int temp[NUM_ZONES];
 extern double setpoint[NUM_ZONES];
 extern uint8_t hysteresis[NUM_ZONES];
 extern uint8_t alarmThresh[NUM_ZONES];
 extern uint8_t coolMinOn[NUM_ZONES];
 extern uint8_t coolMinOff[NUM_ZONES];
+
+//Shared buffer
+extern char buf[20];
 
 extern uint8_t alarmStatus[NUM_ZONES];
 extern unsigned long coolTime[NUM_ZONES];
@@ -44,5 +48,10 @@ extern const char LOGDATA[] PROGMEM;
 #elif defined UI_LCD_I2C
 extern LCDI2C LCD;
 #endif
+
+#define NUM_VLVCFGS NUM_ZONES * 2 + 1 //Per zone Heat and Cool + Global Alarm
+extern unsigned long vlvConfig[NUM_VLVCFGS];
+extern unsigned long actHeats;
+extern unsigned long actCools;
 
 #endif

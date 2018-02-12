@@ -113,4 +113,6 @@ add_avr_library(FT-libs ${ARDUINO_SOURCE} ${ARDUINO_HEADERS}
                         ${TWOWIRE_SOURCES}
                         ${liquidcrystalfp_sources}
                         ${FASTPIN_SOURCES}
-                        ${PID_SOURCES})
+                        ${PID_SOURCES}
+                        ${MENU_SOURCES}
+                        ${DS2482_SOURCES})

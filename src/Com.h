@@ -12,6 +12,13 @@ void updateCom();
 
 #ifdef BTNIC_EMBEDDED
 void btnicRX(int numBytes);
+void updateI2CBTnic();
+#endif
+
+#ifdef COM_SERIAL0
+    #if COM_SERIAL0 == BTNIC
+        void updateS0BTnic();
+    #endif
 #endif
 
 void comEvent(byte eventID, int eventParam);

@@ -81,6 +81,12 @@
 #define COM_SERIAL0  BTNIC
 //#define COM_SERIAL0 BINARY
 
+#ifdef COM_SERIAL0
+  #if COM_SERIAL0 == BTNIC
+    #define BTNIC_PROTOCOL
+  #endif
+#endif
+
 // BAUD_RATE: The baud rate for the Serial0 connection. Previous to BrewTroller 2.0
 // Build 419 this was hard coded to 9600. Starting with Build 419 the default rate
 // was increased to 115200 but can be manually set using this compile option.
@@ -111,6 +117,9 @@
 //**********************************************************************************
 #define BTNIC_EMBEDDED
 
+#ifdef BTNIC_EMBEDDED
+  #define BTNIC_PROTOCOL
+#endif
 
 //**********************************************************************************
 // BrewTroller PID Display (BTPD)

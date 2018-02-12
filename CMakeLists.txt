@@ -29,7 +29,9 @@ include_directories(lib/arduino
                     lib/Wire
                     lib/liquidcrystalfp
                     lib/fastpin
-                    lib/PID_Beta6)
+                    lib/PID_Beta6
+                    lib/menu
+                    lib/ds2482)
 
 add_subdirectory(lib)
 add_subdirectory(src)

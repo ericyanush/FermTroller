@@ -27,9 +27,12 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   
 */
 
+#include <stdint.h>
+#include "Config.h"
 #ifdef BTNIC_PROTOCOL
-  #include "Config.h"
+  #include "FermTroller.h"
   #include "Enum.h"
+  #include "Eeprom.h"
 
 /********************************************************************************************************************
  * BTnic Class
@@ -79,7 +82,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   #define CMDCODE_MAX 119
   #define NO_CMDINDEX -1
   
-  static byte CMD_PARAM_COUNTS[] PROGMEM = 
+  static const uint8_t CMD_PARAM_COUNTS[] PROGMEM =
   {
     0,	//CMD_GET_OSET
     0,	  //Not Used
@@ -135,7 +138,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
     0 	//CMD_VLVPRF
   };
 
-  static byte CMD_INDEX_MAXVALUE[] PROGMEM = 
+  static const uint8_t CMD_INDEX_MAXVALUE[] PROGMEM =
   {
     NUM_ZONES * 2 - 1,	//CMD_GET_OSET
     0,   		  //Not Used

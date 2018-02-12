@@ -4,6 +4,7 @@ set(SOURCE_FILES
         Com.cpp
         Com_BTnic.h
         Com_BTPD.cpp
+        Com_S0ASC.h
         Com_S0ASC.cpp
         Eeprom.h
         Eeprom.cpp
