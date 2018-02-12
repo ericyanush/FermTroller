@@ -25,7 +25,10 @@ add_definitions("-DF_CPU=${MCU_SPEED}")
 
 include_directories(lib/arduino
                     lib/arduino/avr-libc
-                    lib/EEPROM)
+                    lib/EEPROM
+                    lib/Wire
+                    lib/liquidcrystalfp
+                    lib/fastpin)
 
 add_subdirectory(lib)
 add_subdirectory(src)

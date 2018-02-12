@@ -26,6 +26,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   Update 9/22/2010 to support enhanced functions and mutiple schemas.
   
 */
+#include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
 #include <avr/eeprom.h>
@@ -38,8 +39,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 //Code for Schemas 0 & 1
 //**********************************************************************************
 unsigned long lastLog;
-boolean msgQueued;
-byte logCount, msgField;
+bool msgQueued;
+uint8_t logCount, msgField;
 char msg[CMD_MSG_FIELDS][CMD_FIELD_CHARS];
 
 void logStart_P (const char *sType) {
@@ -80,27 +81,27 @@ void logString_P (const char *sType, const char *sText) {
  logEnd();
 }
 
-boolean chkMsg() {
+bool chkMsg() {
   if (!msgQueued) {
     while (Serial.available()) {
-      byte byteIn = Serial.read();
+      uint8_t byteIn = Serial.read();
       if (byteIn == '\r') { 
         msgQueued = 1;
         //Configuration Class (CFG) Commands
         if(strcasecmp(msg[0], "GET_OSET") == 0) {
-          byte val = atoi(msg[1]);
+          uint8_t val = atoi(msg[1]);
           if (msgField == 1 && val < NUM_ZONES * 2) {
             logOSet(val);
             clearMsg();
           } else rejectParam();
         } else if (strcasecmp(msg[0], "GET_TS") == 0) {
-          byte val = atoi(msg[1]);
+          uint8_t val = atoi(msg[1]);
           if (msgField == 1 && val < NUM_ZONES) {
             logTSensor(val);
             clearMsg();
           } else rejectParam();
         } else if(strcasecmp(msg[0], "GET_VLVCFG") == 0) {
-          byte profile = atoi(msg[1]);
+          uint8_t profile = atoi(msg[1]);
           if (msgField == 1 && profile < NUM_VLVCFGS) {
             logVlvConfig(profile);
             clearMsg();
@@ -110,45 +111,45 @@ boolean chkMsg() {
           initEEPROM();
         } else if(strcasecmp(msg[0], "SCAN_TS") == 0) {
           clearMsg();
-          byte tsAddr[8];
+          uint8_t tsAddr[8];
           getDSAddr(tsAddr);
           logStart_P(LOGCFG);
           logField_P(PSTR("TS_SCAN")); 
-          for (byte i=0; i<8; i++) logFieldL(tsAddr[i]);
+          for (uint8_t i=0; i<8; i++) logFieldL(tsAddr[i]);
           logEnd();
         } else if(strcasecmp(msg[0], "SET_OSET") == 0) {
-          byte val = atoi(msg[1]);
+          uint8_t val = atoi(msg[1]);
           if (msgField == 2 && val < NUM_ZONES * 2) {
-            setHysteresis(val, (byte)atoi(msg[2]));
+            setHysteresis(val, (uint8_t)atoi(msg[2]));
             clearMsg();
             logOSet(val);
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_TS") == 0) {
-          byte val = atoi(msg[1]);
+          uint8_t val = atoi(msg[1]);
           if (msgField == 9 && val < NUM_ZONES) {
-            byte addr[8];
-            for (byte i=0; i<8; i++) addr[i] = (byte)atoi(msg[i+2]);
+            uint8_t addr[8];
+            for (uint8_t i=0; i<8; i++) addr[i] = (uint8_t)atoi(msg[i+2]);
             setTSAddr(val, addr);
             clearMsg();
             logTSensor(val);
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_VLVCFG") == 0) {
-          byte profile = atoi(msg[1]);
+          uint8_t profile = atoi(msg[1]);
           if (msgField == 2 && profile < NUM_VLVCFGS) {
             setValveCfg(profile, strtoul(msg[2], NULL, 10));
             clearMsg();
             logVlvConfig(profile);
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_ALARM") == 0) {
-          byte zone = atoi(msg[1]);
+          uint8_t zone = atoi(msg[1]);
           if (msgField == 2) {
             setAlarmStatus(zone, atoi(msg[2]));
             sendOK();
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_SETPOINT") == 0) {
-          byte vessel = atoi(msg[1]);
+          uint8_t vessel = atoi(msg[1]);
           if (msgField == 2 && vessel < NUM_ZONES) {
-            setSetpoint(vessel, (byte)atoi(msg[2]));
+            setSetpoint(vessel, (uint8_t)atoi(msg[2]));
             sendOK();
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_VLV") == 0) {
@@ -158,7 +159,7 @@ boolean chkMsg() {
 
         //System Class (SYS) Commands
         } else if(strcasecmp(msg[0], "RESET") == 0) {
-          byte level = atoi(msg[1]);
+          uint8_t level = atoi(msg[1]);
           if (msgField == 1 && level >= 0 && level <= 1) {
             clearMsg();
             if (level == 0) {
@@ -172,7 +173,7 @@ boolean chkMsg() {
           } else rejectParam();
         } else if(strcasecmp(msg[0], "SET_LOGSTATUS") == 0) {
           if (msgField == 1) {
-            logData = (boolean)atoi(msg[1]);
+            logData = (bool)atoi(msg[1]);
             sendOK();
           } else rejectParam();
         } else if(strcasecmp(msg[0], "GET_VER") == 0) {
@@ -222,7 +223,7 @@ boolean chkMsg() {
           clearMsg();
         }
       } else {
-        byte charCount = strlen(msg[msgField]);
+        uint8_t charCount = strlen(msg[msgField]);
         if (charCount < CMD_FIELD_CHARS - 1) { 
           msg[msgField][charCount] = byteIn; 
           msg[msgField][charCount + 1] = '\0';
@@ -248,13 +249,13 @@ void sendOK() {
 void clearMsg() {
   msgQueued = 0;
   msgField = 0;
-  for (byte i = 0; i < CMD_MSG_FIELDS; i++) msg[i][0] = '\0';
+  for (uint8_t i = 0; i < CMD_MSG_FIELDS; i++) msg[i][0] = '\0';
 }
 
 void rejectMsg() {
   logStart_P(LOGCMD);
   logField_P(PSTR("UNKNOWN_CMD"));
-  for (byte i = 0; i < msgField; i++) logField(msg[i]);
+  for (uint8_t i = 0; i < msgField; i++) logField(msg[i]);
   logEnd();
   clearMsg();
 }
@@ -262,7 +263,7 @@ void rejectMsg() {
 void rejectParam() {
   logStart_P(LOGCMD);
   logField_P(PSTR("BAD_PARAM"));
-  for (byte i = 0; i <= msgField; i++) logField(msg[i]);
+  for (uint8_t i = 0; i <= msgField; i++) logField(msg[i]);
   logEnd();
   clearMsg();
 }
@@ -297,7 +298,7 @@ void updateS0ASCII() {
 
 void getLog() {
   if (logCount < NUM_ZONES) {
-    byte i = logCount;
+    uint8_t i = logCount;
     logStart_P(LOGDATA);
     logField_P(PSTR("TEMP"));
     logFieldL(i);
@@ -340,7 +341,7 @@ void getLog() {
   }
 }
 
-void logOSet(byte vessel) {
+void logOSet(uint8_t vessel) {
   logStart_P(LOGCFG);
   logField_P(PSTR("OUTPUT_SET"));
   logFieldL(vessel);
@@ -348,22 +349,22 @@ void logOSet(byte vessel) {
   logEnd();
 }
 
-void logTSensor(byte sensor) {
+void logTSensor(uint8_t sensor) {
   logStart_P(LOGCFG);
   logField_P(PSTR("TS_ADDR"));
   logFieldL(sensor);
-  for (byte i=0; i<8; i++) logFieldL(tSensor[sensor][i]);
+  for (uint8_t i=0; i<8; i++) logFieldL(tSensor[sensor][i]);
   logEnd();
 }
 
-void logAlarm(byte zone) {
+void logAlarm(uint8_t zone) {
   logStart_P(LOGDATA);
   logField_P(PSTR("ALARM"));
   logFieldL(alarmStatus[zone]);
   logEnd();
 }
 
-void logVlvConfig (byte profile) {
+void logVlvConfig (uint8_t profile) {
   logStart_P(LOGCFG);
   logField_P(PSTR("VLV_CONFIG"));
   logFieldL(profile);

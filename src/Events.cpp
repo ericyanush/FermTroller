@@ -28,6 +28,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
+#include "FermTroller.h"
+#include "EEPROM.h"
 
 void eventHandler(uint8_t eventID, int eventParam) {
   //Global Event handler

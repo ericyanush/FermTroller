@@ -148,14 +148,14 @@ char buf[20];
 
 //Output Globals
 double setpoint[NUM_ZONES];
-byte hysteresis[NUM_ZONES];
-byte alarmThresh[NUM_ZONES];
+uint8_t hysteresis[NUM_ZONES];
+uint8_t alarmThresh[NUM_ZONES];
 
 //Full Cool -100, Idle 0, Full Heat 100
 int zonePwr[NUM_ZONES];
 
 //Log Globals
-boolean logData = LOG_INITSTATUS;
+bool logData = LOG_INITSTATUS;
 
 const char BT[] PROGMEM = "FermTroller";
 const char BTVER[] PROGMEM = "2.2";

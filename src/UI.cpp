@@ -129,7 +129,7 @@ void UIinitEEPROM() {
   checkConfig();
 }
 
-void uiEvent(byte eventID, byte eventParam) {
+void uiEvent(uint8_t eventID, uint8_t eventParam) {
   switch (eventID) {
     case EVENT_ALARM_TEMPHOT:
     case EVENT_ALARM_TEMPCOLD:

@@ -109,4 +109,7 @@ set_source_files_properties(${ARDUINO_SOURCE} ${ARDUINO_HEADERS}
                             ${ONEWIRE_SOURCES} PROPERTIES COMPILE_FLAGS "-Wno-sign-compare -Wno-unused-variable -Wno-strict-aliasing -Wno-attributes -Wno-parentheses -Wno-return-type -Wno-maybe-uninitialized")
 
 add_avr_library(FT-libs ${ARDUINO_SOURCE} ${ARDUINO_HEADERS}
-                        ${EEPROM_SOURCES})
+                        ${EEPROM_SOURCES}
+                        ${TWOWIRE_SOURCES}
+                        ${liquidcrystalfp_sources}
+                        ${FASTPIN_SOURCES})

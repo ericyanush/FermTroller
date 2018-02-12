@@ -1,5 +1,6 @@
 # Source files for BrewTroller
 set(SOURCE_FILES
+        Com.h
         Com.cpp
         Com_BTnic.h
         Com_BTPD.cpp
@@ -8,6 +9,7 @@ set(SOURCE_FILES
         EEPROM.cpp
         Enum.h
         Events.cpp
+        FermCore.h
         FermCore.cpp
         FermTroller.h
         FermTroller.cpp
@@ -15,6 +17,7 @@ set(SOURCE_FILES
         Outputs.cpp
         PVOut.h
         Temp.cpp
+        UI.h
         UI.cpp
         UI_LCD.h
         Util.cpp)

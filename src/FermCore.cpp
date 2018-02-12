@@ -24,9 +24,12 @@ Hardware Lead: Jeremiah Dillingham (jeremiah_AT_brewtroller_DOT_com)
 Documentation, Forums and more information available at http://www.brewtroller.com
 */
 
+#include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
 #include "HWProfile.h"
+#include "FermCore.h"
+#include "FermTroller.h"
 
 void fermCore() {
   #ifdef HEARTBEAT

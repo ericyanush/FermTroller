@@ -23,13 +23,12 @@ Hardware Lead: Jeremiah Dillingham (jeremiah_AT_brewtroller_DOT_com)
 
 Documentation, Forums and more information available at http://www.brewtroller.com
 */
-
+#include <Arduino.h>
 #include "FermTroller.h"
 #include "EEPROM.h"
 #include "Config.h"
 #include "Enum.h"
 #include <avr/eeprom.h>
-#include <EEPROM.h>
 
 void loadSetup() {
   //**********************************************************************************
@@ -41,7 +40,7 @@ void loadSetup() {
   //**********************************************************************************
   // Per Zone Settings
   //**********************************************************************************
-  for (byte zone = 0; zone < NUM_ZONES; zone++) {
+  for (uint8_t zone = 0; zone < NUM_ZONES; zone++) {
 
     //********************************************************************************
     // Hysteresis (256 - 287)
@@ -91,7 +90,7 @@ void loadVlvConfigs() {
 //**********************************************************************************
 // TSensors: 8 bytes per zone (Reserve for 32 zones: 0-255)
 //**********************************************************************************
-void setTSAddr(byte zone, byte addr[8]) {
+void setTSAddr(uint8_t zone, uint8_t addr[8]) {
   memcpy(tSensor[zone], addr, 8);
   PROMwriteBytes(zone * 8, addr, 8);
 }
@@ -100,7 +99,7 @@ void setTSAddr(byte zone, byte addr[8]) {
 //**********************************************************************************
 // Hysteresis (256 - 287)
 //**********************************************************************************
-void setHysteresis(byte output, byte value) {
+void setHysteresis(uint8_t output, uint8_t value) {
   hysteresis[output] = value;
   EEPROM.write(256 + output, value);
 }
@@ -108,7 +107,7 @@ void setHysteresis(byte output, byte value) {
 //**********************************************************************************
 // Alarm Threshhold (288 - 319)
 //**********************************************************************************
-void setAlarmThresh(byte output, byte value) {
+void setAlarmThresh(uint8_t output, uint8_t value) {
   alarmThresh[output] = value;
   EEPROM.write(288 + output, value);
 }
@@ -116,19 +115,19 @@ void setAlarmThresh(byte output, byte value) {
 //**********************************************************************************
 // Alarm Status (320 - 351)
 //**********************************************************************************
-void setAlarmStatus(byte zone, byte value) {
+void setAlarmStatus(uint8_t zone, uint8_t value) {
   alarmStatus[zone] = value;
   saveAlarmStatus(zone);
 }
 
-void saveAlarmStatus(byte zone) {
+void saveAlarmStatus(uint8_t zone) {
   EEPROM.write(320 + zone, alarmStatus[zone]);
 }
 
 //********************************************************************************
 // Minimum Cool Output Active Period (352 - 383)
 //********************************************************************************
-void setCoolMinOn(byte zone, byte value) {
+void setCoolMinOn(uint8_t zone, uint8_t value) {
   coolMinOn[zone] = value;
   EEPROM.write(352 + zone, value);
 }
@@ -136,7 +135,7 @@ void setCoolMinOn(byte zone, byte value) {
 //********************************************************************************
 // Minimum Cool Output Inactive Period (384 - 415)
 //********************************************************************************
-void setCoolMinOff(byte zone, byte value) {
+void setCoolMinOff(uint8_t zone, uint8_t value) {
   coolMinOff[zone] = value;
   EEPROM.write(384 + zone, value);
 }
@@ -148,7 +147,7 @@ void setCoolMinOff(byte zone, byte value) {
 //**********************************************************************************
 // Setpoints: 2 Bytes per zone (640-703)
 //**********************************************************************************
-void setSetpoint(byte zone, int value) {
+void setSetpoint(uint8_t zone, int value) {
   setpoint[zone] = value;
   PROMwriteInt(640 + zone * 2, value);
 }
@@ -156,7 +155,7 @@ void setSetpoint(byte zone, int value) {
 //*****************************************************************************************************************************
 // Valve Profiles (705-964) 4 Bytes per profile, 2 profiles per zone plus alarm profile
 //*****************************************************************************************************************************
-void setValveCfg(byte profile, unsigned long value) {
+void setValveCfg(uint8_t profile, unsigned long value) {
   vlvConfig[profile] = value;
   PROMwriteLong(705 + profile * 4, value);
 }
@@ -164,15 +163,15 @@ void setValveCfg(byte profile, unsigned long value) {
 //*****************************************************************************************************************************
 // Zone names (965 - 1540) 18 bytes per zone (17 chars + NULL)
 //*****************************************************************************************************************************
-char* getZoneName(byte zone, char name[]) {
+char* getZoneName(uint8_t zone, char name[]) {
   memset(name, ' ', 17);
   name[17] = '\0';
-  for (byte chr = 0; chr < 18; chr++) name[chr] = EEPROM.read(965 + zone * 18 + chr);
+  for (uint8_t chr = 0; chr < 18; chr++) name[chr] = EEPROM.read(965 + zone * 18 + chr);
   return name;
 }
 
-void setZoneName(byte zone, char name[]) {
-  for (byte chr = 0; chr < 18; chr++) EEPROM.write(965 + zone * 18 + chr, name[chr]);
+void setZoneName(uint8_t zone, char name[]) {
+  for (uint8_t chr = 0; chr < 18; chr++) EEPROM.write(965 + zone * 18 + chr, name[chr]);
 }
 
 
@@ -195,8 +194,8 @@ void setZoneName(byte zone, char name[]) {
 // Check/Update/Format EEPROM
 //*****************************************************************************************************************************
 boolean checkConfig() {
-  byte cfgVersion = EEPROM.read(2047);
-  byte BTFinger = EEPROM.read(2046);
+  uint8_t cfgVersion = EEPROM.read(2047);
+  uint8_t BTFinger = EEPROM.read(2046);
 
   //If the fingerprint is missing force a init of EEPROM
   if (BTFinger != 253 || cfgVersion == 255 || cfgVersion < 7) {
@@ -222,7 +221,7 @@ void initEEPROM() {
   EEPROM.write(2046, 253);
 
   //Default Output Settings: p: 3, i: 4, d: 2, cycle: 4s, Hysteresis 0.3C(0.5F)
-  for (byte zone = 0; zone <= NUM_ZONES; zone++) {
+  for (uint8_t zone = 0; zone <= NUM_ZONES; zone++) {
     #ifdef USEMETRIC
       setHysteresis(zone, 3);
       setAlarmThresh(zone, 6);
@@ -237,8 +236,8 @@ void initEEPROM() {
     strcpy_P(name, PSTR("Zone "));
     itoa(zone + 1, buf, 10);
     strcat(name, buf);
-    byte len = strlen(name);
-    for (byte i = len; i < 17; i++) name[i] = ' ';
+    uint8_t len = strlen(name);
+    for (uint8_t i = len; i < 17; i++) name[i] = ' ';
     name[17] = '\0';
     setZoneName(zone, name);
   }

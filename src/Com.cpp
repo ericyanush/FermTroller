@@ -31,6 +31,9 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
+#include "FermTroller.h"
+#include "Com.h"
+#include <Wire.h>
 
 void comInit() {
   #ifdef COM_SERIAL0
@@ -93,7 +96,7 @@ void updateCom() {
 /********************************************************************************************************************
  * BTnic Instances
  ********************************************************************************************************************/
-#ifdef BTNIC_PROTOCOL
+#ifdef BTNIC_EMBEDDED
   #include "Com_BTnic.h"
   
   #ifdef BTNIC_EMBEDDED
