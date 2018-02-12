@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void comInit();
+
 void logASCIIVersion();
 
 void printFieldUL (unsigned long uLong);

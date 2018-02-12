@@ -50,6 +50,7 @@ Compiled on Arduino-0022 (http://arduino.cc/en/Main/Software)
 #include "HWProfile.h"
 #include "PVOut.h"
 #include "UI_LCD.h"
+#include "Com.h"
 
 void(* softReset) (void) = 0;
 

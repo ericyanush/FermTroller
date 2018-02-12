@@ -6,15 +6,26 @@
 #include "Config.h"
 #include "HWProfile.h"
 
+#ifdef USEMETRIC
+#define SETPOINT_MULT 50
+  #define SETPOINT_DIV 2
+#else
+#define SETPOINT_MULT 100
+#define SETPOINT_DIV 1
+#endif
+
 #ifdef HEARTBEAT
     extern pin hbPin;
 #endif
+
+void softReset();
 
 extern uint8_t tSensor[NUM_ZONES][8];
 extern int temp[NUM_ZONES];
 extern double setpoint[NUM_ZONES];
 extern uint8_t hysteresis[NUM_ZONES];
 extern uint8_t alarmThresh[NUM_ZONES];
+extern int zonePwr[NUM_ZONES];
 extern uint8_t coolMinOn[NUM_ZONES];
 extern uint8_t coolMinOff[NUM_ZONES];
 

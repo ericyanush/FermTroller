@@ -33,6 +33,8 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   #include "FermTroller.h"
   #include "Enum.h"
   #include "Eeprom.h"
+  #include "Temp.h"
+  #include "Outputs.h"
 
 /********************************************************************************************************************
  * BTnic Class

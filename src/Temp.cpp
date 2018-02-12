@@ -29,6 +29,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "Enum.h"
 #include "HWProfile.h"
 #include "FermTroller.h"
+#include "Temp.h"
 
 #ifdef TS_ONEWIRE
   unsigned long convStart;
@@ -106,20 +107,20 @@ void convertAll() {
     }
   }
 
-  boolean tsReady() {
+  bool tsReady() {
     #if TS_ONEWIRE_PPWR == 0 //Poll if parasite power is disabled
       if (ds.read() == 0xFF) return 1;
     #endif
     return 0;
   }
   
-  boolean validAddr(byte* addr) {
+  bool validAddr(uint8_t * addr) {
     for (byte i = 0; i < 8; i++) if (addr[i]) return 1;
     return 0;
   }
   
   //This function search for an address that is not currently assigned!
-  void getDSAddr(byte addrRet[8]){
+  void getDSAddr(uint8_t addrRet[8]){
   //Leaving stub for external functions (serial and setup) that use this function
     byte scanAddr[8];
     ds.reset_search();
@@ -155,7 +156,7 @@ void convertAll() {
   }
   
 //Returns Int representing hundreths of degree
-  int read_temp(byte* addr) {
+  int read_temp(uint8_t * addr) {
     long tempOut;
     byte data[9];
 
