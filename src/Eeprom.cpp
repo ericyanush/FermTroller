@@ -25,7 +25,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 */
 #include <Arduino.h>
 #include "FermTroller.h"
-#include "EEPROM.h"
+#include "Eeprom.h"
 #include "Config.h"
 #include "Enum.h"
 #include <avr/eeprom.h>

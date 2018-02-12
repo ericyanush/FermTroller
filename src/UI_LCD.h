@@ -27,13 +27,13 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #ifndef UILCD_H
   #define UILCD_H
 
+  #include <EEPROM.h>
   #include "Config.h"
   #include "Enum.h"
   #include "HWProfile.h"
   #include <Wire.h>
   #include <LiquidCrystalFP.h>
   #include <stdlib.h> // for malloc and free
-  #include <EEPROM.h>
 
   void* operator new(size_t size) { return malloc(size); }
   void operator delete(void* ptr) { free(ptr); }

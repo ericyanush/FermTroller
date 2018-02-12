@@ -5,8 +5,8 @@ set(SOURCE_FILES
         Com_BTnic.h
         Com_BTPD.cpp
         Com_S0ASC.cpp
-        EEPROM.h
-        EEPROM.cpp
+        Eeprom.h
+        Eeprom.cpp
         Enum.h
         Events.cpp
         FermCore.h
@@ -14,8 +14,10 @@ set(SOURCE_FILES
         FermTroller.h
         FermTroller.cpp
         HWProfile.h
+        Outputs.h
         Outputs.cpp
         PVOut.h
+        Temp.h
         Temp.cpp
         UI.h
         UI.cpp

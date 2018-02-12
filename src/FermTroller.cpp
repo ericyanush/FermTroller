@@ -1,5 +1,4 @@
-#define BUILD 0
-/*  
+/*
   Copyright (C) 2009, 2010 Matt Reba, Jeremiah Dillingham
 
     This file is part of FermTroller.
@@ -159,6 +158,7 @@ bool logData = LOG_INITSTATUS;
 
 const char BT[] PROGMEM = "FermTroller";
 const char BTVER[] PROGMEM = "2.2";
+const unsigned BUILD = 0;
 
 //Log Strings
 const char LOGCMD[] PROGMEM = "CMD";

@@ -25,11 +25,13 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 */
 
 #include <stdint.h>
+#include "Eeprom.h"
 #include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
 #include "FermTroller.h"
-#include "EEPROM.h"
+#include "UI.h"
+#include "Com.h"
 
 void eventHandler(uint8_t eventID, int eventParam) {
   //Global Event handler

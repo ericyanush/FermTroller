@@ -148,7 +148,7 @@ void updateCom() {
 
 
 void comEvent(byte eventID, int eventParam) {
-  #ifdef BTNIC_PROTOCOL
+  #ifdef BTNIC_EMBEDDED
     #ifdef BTNIC_EMBEDDED
       btnicI2C.eventHandler(eventID, eventParam);
     #endif

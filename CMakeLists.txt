@@ -28,7 +28,8 @@ include_directories(lib/arduino
                     lib/EEPROM
                     lib/Wire
                     lib/liquidcrystalfp
-                    lib/fastpin)
+                    lib/fastpin
+                    lib/PID_Beta6)
 
 add_subdirectory(lib)
 add_subdirectory(src)

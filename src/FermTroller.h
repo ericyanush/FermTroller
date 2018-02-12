@@ -6,12 +6,32 @@
 #include "Config.h"
 #include "HWProfile.h"
 
+#ifdef HEARTBEAT
+    extern pin hbPin;
+#endif
+
 extern uint8_t tSensor[NUM_ZONES][8];
+extern double setpoint[NUM_ZONES];
 extern uint8_t hysteresis[NUM_ZONES];
+extern uint8_t alarmThresh[NUM_ZONES];
+extern uint8_t coolMinOn[NUM_ZONES];
+extern uint8_t coolMinOff[NUM_ZONES];
 
 extern uint8_t alarmStatus[NUM_ZONES];
+extern unsigned long coolTime[NUM_ZONES];
 
 extern bool logData;
+
+extern const char BT[] PROGMEM;
+extern const char BTVER[] PROGMEM;
+extern unsigned BUILD;
+
+//Log Strings
+extern const char LOGCMD[] PROGMEM;
+extern const char LOGDEBUG[] PROGMEM;
+extern const char LOGSYS[] PROGMEM;
+extern const char LOGCFG[] PROGMEM;
+extern const char LOGDATA[] PROGMEM;
 
 #if defined UI_LCD_4BIT
 

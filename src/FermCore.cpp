@@ -30,6 +30,9 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "HWProfile.h"
 #include "FermCore.h"
 #include "FermTroller.h"
+#include "Temp.h"
+#include "Outputs.h"
+#include "Com.h"
 
 void fermCore() {
   #ifdef HEARTBEAT
