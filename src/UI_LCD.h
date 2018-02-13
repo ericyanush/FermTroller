@@ -35,10 +35,6 @@ Documentation, Forums and more information available at http://www.brewtroller.c
   #include <LiquidCrystalFP.h>
   #include <stdlib.h> // for malloc and free
 
-  void* operator new(size_t size) { return malloc(size); }
-  void operator delete(void* ptr) { free(ptr); }
-
-
   //*****************************************************************************************************************************
   // 4-Bit GPIO LCD Class
   //*****************************************************************************************************************************

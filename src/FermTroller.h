@@ -5,6 +5,7 @@
 #include "UI_LCD.h"
 #include "Config.h"
 #include "HWProfile.h"
+#include "PVOut.h"
 
 #ifdef USEMETRIC
 #define SETPOINT_MULT 50
@@ -29,6 +30,18 @@ extern int zonePwr[NUM_ZONES];
 extern uint8_t coolMinOn[NUM_ZONES];
 extern uint8_t coolMinOff[NUM_ZONES];
 
+#if defined PVOUT_TYPE_GPIO
+#define PVOUT
+extern PVOutGPIO Valves;
+
+#elif defined PVOUT_TYPE_MUX
+#define PVOUT
+  extern PVOutMUX Valves;
+#elif defined PVOUT_TYPE_MODBUS
+  #define PVOUT
+  extern PVOutMODBUS Valves;
+#endif
+
 //Shared buffer
 extern char buf[20];
 
@@ -37,16 +50,16 @@ extern unsigned long coolTime[NUM_ZONES];
 
 extern bool logData;
 
-extern const char BT[] PROGMEM;
-extern const char BTVER[] PROGMEM;
+extern const char BT[];
+extern const char BTVER[];
 extern unsigned BUILD;
 
 //Log Strings
-extern const char LOGCMD[] PROGMEM;
-extern const char LOGDEBUG[] PROGMEM;
-extern const char LOGSYS[] PROGMEM;
-extern const char LOGCFG[] PROGMEM;
-extern const char LOGDATA[] PROGMEM;
+extern const char LOGCMD[];
+extern const char LOGDEBUG[];
+extern const char LOGSYS[];
+extern const char LOGCFG[];
+extern const char LOGDATA[];
 
 #if defined UI_LCD_4BIT
 
@@ -62,6 +75,7 @@ extern LCDI2C LCD;
 
 #define NUM_VLVCFGS NUM_ZONES * 2 + 1 //Per zone Heat and Cool + Global Alarm
 extern unsigned long vlvConfig[NUM_VLVCFGS];
+extern bool buzzStatus;
 extern unsigned long actHeats;
 extern unsigned long actCools;
 

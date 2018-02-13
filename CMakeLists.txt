@@ -31,7 +31,8 @@ include_directories(lib/arduino
                     lib/fastpin
                     lib/PID_Beta6
                     lib/menu
-                    lib/ds2482)
+                    lib/ds2482
+                    lib/encoder)
 
 add_subdirectory(lib)
 add_subdirectory(src)

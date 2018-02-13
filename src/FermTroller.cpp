@@ -51,6 +51,11 @@ Compiled on Arduino-0022 (http://arduino.cc/en/Main/Software)
 #include "PVOut.h"
 #include "UI_LCD.h"
 #include "Com.h"
+#include "Outputs.h"
+#include "Temp.h"
+#include "Eeprom.h"
+#include "UI.h"
+#include "FermCore.h"
 
 void(* softReset) (void) = 0;
 
@@ -270,3 +275,16 @@ void loop() {
   fermCore();
 }
 
+int main(void)
+{
+    init();
+
+    setup();
+
+    for (;;) {
+        loop();
+        if (serialEventRun) serialEventRun();
+    }
+
+    return 0;
+}

@@ -115,4 +115,5 @@ add_avr_library(FT-libs ${ARDUINO_SOURCE} ${ARDUINO_HEADERS}
                         ${FASTPIN_SOURCES}
                         ${PID_SOURCES}
                         ${MENU_SOURCES}
-                        ${DS2482_SOURCES})
+                        ${DS2482_SOURCES}
+                        ${ENCODER_SOURCES})

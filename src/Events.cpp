@@ -32,6 +32,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "FermTroller.h"
 #include "UI.h"
 #include "Com.h"
+#include "Events.h"
 
 void eventHandler(uint8_t eventID, int eventParam) {
   //Global Event handler

@@ -35,10 +35,10 @@
   {
     private:
     pin muxLatchPin, muxDataPin, muxClockPin, muxEnablePin;
-    boolean muxEnableLogic;
+    bool muxEnableLogic;
     
     public:
-    PVOutMUX(byte latchPin, byte dataPin, byte clockPin, byte enablePin, boolean enableLogic) {
+    PVOutMUX(uint8_t latchPin, uint8_t dataPin, uint8_t clockPin, uint8_t enablePin, bool enableLogic) {
       muxLatchPin.setup(latchPin, OUTPUT);
       muxDataPin.setup(dataPin, OUTPUT);
       muxClockPin.setup(clockPin, OUTPUT);
@@ -69,7 +69,7 @@
       muxClockPin.clear();
     
       //for each bit in the long myDataOut
-      for (byte i = 0; i < 32; i++)  {
+      for (uint8_t i = 0; i < 32; i++)  {
         muxClockPin.clear();
         //create bitmask to grab the bit associated with our counter i and set data pin accordingly (NOTE: 32 - i causes bits to be sent most significant to least significant)
         if ( vlvBits & ((unsigned long)1<<(31 - i)) ) muxDataPin.set(); else muxDataPin.clear();

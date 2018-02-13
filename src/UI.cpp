@@ -30,6 +30,13 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "HWProfile.h"
 #include <encoder.h>
 #include "UI_LCD.h"
+#include "FermTroller.h"
+#include "UI.h"
+#include "Eeprom.h"
+#include "Outputs.h"
+#include "Util.h"
+#include "FermCore.h"
+#include "Temp.h"
 
 //*****************************************************************************************************************************
 // Begin UI Code
@@ -89,7 +96,7 @@ const byte BELL[] PROGMEM = {B00100, B01110, B01110, B01110, B11111, B00000, B00
 // UI Globals
 //**********************************************************************************
 byte activeScreen, inMenu;
-boolean screenLock;
+bool screenLock;
 
 //**********************************************************************************
 // uiInit:  One time intialization of all UI logic
@@ -424,7 +431,7 @@ void menuSetup() {
 void assignSensor() {
   inMenu++;
   menu tsMenu(1, NUM_ZONES);
-  for (byte zone = 0; zone < NUM_ZONES; zone++) {
+  for (uint8_t zone = 0; zone < NUM_ZONES; zone++) {
     tsMenu.setItem_P(ZONE, zone);
     itoa(zone + 1, buf, 10);
     tsMenu.appendItem(buf, zone);
@@ -434,7 +441,7 @@ void assignSensor() {
   Encoder.setMax(NUM_ZONES - 1);
   Encoder.setCount(0);
   
-  boolean redraw = 1;
+  bool redraw = 1;
   int encValue;
   
   while (1) {
@@ -450,7 +457,7 @@ void assignSensor() {
       LCD.clear();
       LCD.print_P(0, 0, PSTR("Assign Temp Sensor"));
       LCD.center(1, 0, tsMenu.getSelectedRow(buf), 20);
-      for (byte i = 0; i < 8; i++) LCD.lPad(2, i * 2 + 2, itoa(tSensor[encValue][i], buf, 16), 2, '0');
+      for (uint8_t i = 0; i < 8; i++) LCD.lPad(2, i * 2 + 2, itoa(tSensor[encValue][i], buf, 16), 2, '0');
     }
     displayAssignSensorTemp(tsMenu.getValue()); //Update each loop
 
@@ -466,7 +473,7 @@ void assignSensor() {
       tsOpMenu.setItem_P(PSTR("Delete Address"), 1);
       tsOpMenu.setItem_P(CANCEL, 2);
       tsOpMenu.setItem_P(EXIT, 255);
-      byte selected = scrollMenu(tsMenu.getSelectedRow(buf), &tsOpMenu);
+      uint8_t selected = scrollMenu(tsMenu.getSelectedRow(buf), &tsOpMenu);
       if (selected == 0) {
         LCD.clear();
         LCD.center(0, 0, tsMenu.getSelectedRow(buf), 20);
@@ -474,13 +481,13 @@ void assignSensor() {
         LCD.print_P(2,2,PSTR("temp sensors now"));
         {
           if (confirmChoice(CONTINUE, 3)) {
-            byte addr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+            uint8_t addr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
             getDSAddr(addr);
             setTSAddr(encValue, addr);
           }
         }
       } else if (selected == 1) {
-        byte addr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+        uint8_t addr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
         setTSAddr(encValue, addr);
       }
       else if (selected > 2) {
@@ -510,7 +517,7 @@ void displayAssignSensorTemp(int sensor) {
 void cfgOutputs() {
   menu outputsMenu(3, NUM_ZONES + 2);
   
-  for (byte zone = 0; zone < NUM_ZONES; zone++) {
+  for (uint8_t zone = 0; zone < NUM_ZONES; zone++) {
     outputsMenu.setItem_P(ZONE, zone);
     itoa(zone + 1, buf, 10);
     outputsMenu.appendItem(buf, zone);
@@ -519,7 +526,7 @@ void cfgOutputs() {
   outputsMenu.setItem_P(EXIT, 255);
 
   while(1) {    
-    byte zone = scrollMenu("Output Settings", &outputsMenu);
+    uint8_t zone = scrollMenu("Output Settings", &outputsMenu);
     if (zone < NUM_ZONES) cfgOutput(zone, outputsMenu.getSelectedRow(buf));
     else if (zone == NUM_ZONES) setValveCfg(VLV_ALARM, cfgValveProfile("Alarm", vlvConfig[VLV_ALARM]));
     else return;
@@ -527,17 +534,17 @@ void cfgOutputs() {
   } 
 }
 
-void cfgOutput(byte zone, char sTitle[]) {
+void cfgOutput(uint8_t zone, char sTitle[]) {
   menu outputMenu(3, 5);
   while(1) { 
     outputMenu.setItem_P(PSTR("Heat Output Profile"), 2);
     outputMenu.setItem_P(PSTR("Cool Output Profile"), 3);
     
     outputMenu.setItem_P(PSTR("Min Cool On: "), 4);
-    byte hours = coolMinOn[zone] / 60;
+    uint8_t hours = coolMinOn[zone] / 60;
     outputMenu.appendItem(itoa(hours, buf, 10), 4);
     outputMenu.appendItem(":", 4);
-    byte mins = coolMinOn[zone] - hours * 60;
+    uint8_t mins = coolMinOn[zone] - hours * 60;
     itoa(mins, buf, 10);
     strLPad(buf, 2, '0');
     outputMenu.appendItem(buf, 4);
@@ -553,7 +560,7 @@ void cfgOutput(byte zone, char sTitle[]) {
 
     outputMenu.setItem_P(EXIT, 255);
  
-    byte lastOption = scrollMenu(sTitle, &outputMenu);
+    uint8_t lastOption = scrollMenu(sTitle, &outputMenu);
     char hTitle[21];
     strcpy(hTitle, sTitle);
 
@@ -576,7 +583,7 @@ void cfgOutput(byte zone, char sTitle[]) {
 unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
   unsigned long retValue = defValue;
   //firstBit: The left most bit being displayed
-  byte firstBit, encMax;
+  uint8_t firstBit, encMax;
   inMenu++;
   
   encMax = PVOUT_COUNT + 1;
@@ -592,7 +599,7 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
   LCD.print_P(3, 3, PSTR("Test"));
   LCD.print_P(3, 13, PSTR("Save"));
   
-  boolean redraw = 1;
+  bool redraw = 1;
   while(1) {
     int encValue;
     if (redraw) {
@@ -603,10 +610,10 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
     if (encValue >= 0) {
       if (encValue < firstBit || encValue > firstBit + 17) {
         if (encValue < firstBit) firstBit = encValue; else if (encValue < encMax - 1) firstBit = encValue - 17;
-        for (byte i = firstBit; i < min(encMax - 1, firstBit + 18); i++) if (retValue & ((unsigned long)1<<i)) LCD.print_P(1, i - firstBit + 1, PSTR("1")); else LCD.print_P(1, i - firstBit + 1, PSTR("0"));
+        for (uint8_t i = firstBit; i < min(encMax - 1, firstBit + 18); i++) if (retValue & ((unsigned long)1<<i)) LCD.print_P(1, i - firstBit + 1, PSTR("1")); else LCD.print_P(1, i - firstBit + 1, PSTR("0"));
       }
 
-      for (byte i = firstBit; i < min(encMax - 1, firstBit + 18); i++) {
+      for (uint8_t i = firstBit; i < min(encMax - 1, firstBit + 18); i++) {
         if (i < 9) itoa(i + 1, buf, 10); else buf[0] = i + 56;
         buf[1] = '\0';
         LCD.print(2, i - firstBit + 1, buf);
@@ -649,7 +656,7 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
         redraw = 1;
       } else {
         retValue = retValue ^ ((unsigned long)1<<encValue);
-        for (byte i = firstBit; i < min(encMax - 1, firstBit + 18); i++) if (retValue & ((unsigned long)1<<i)) LCD.print_P(1, i - firstBit + 1, PSTR("1")); else LCD.print_P(1, i - firstBit + 1, PSTR("0"));
+        for (uint8_t i = firstBit; i < min(encMax - 1, firstBit + 18); i++) if (retValue & ((unsigned long)1<<i)) LCD.print_P(1, i - firstBit + 1, PSTR("1")); else LCD.print_P(1, i - firstBit + 1, PSTR("0"));
       }
     } else if (Encoder.cancel()) {
       inMenu--;
@@ -661,8 +668,8 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
 
 #ifdef UI_DISPLAY_SETUP
   void adjustLCD() {
-    byte cursorPos = 0; //0 = brightness, 1 = contrast, 2 = cancel, 3 = save
-    boolean cursorState = 0; //0 = Unselected, 1 = Selected
+    uint8_t cursorPos = 0; //0 = brightness, 1 = contrast, 2 = cancel, 3 = save
+    bool cursorState = 0; //0 = Unselected, 1 = Selected
     inMenu++;
     
     Encoder.setMin(0);
@@ -675,11 +682,11 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
     LCD.print_P(2, 3, PSTR("Contrast:"));
     LCD.print_P(3, 1, PSTR("Cancel"));
     LCD.print_P(3, 15, PSTR("Save"));
-    byte bright = LCD.getBright();
-    byte contrast = LCD.getContrast();
-    byte origBright = bright;
-    byte origContrast = contrast;
-    boolean redraw = 1;
+    uint8_t bright = LCD.getBright();
+    uint8_t contrast = LCD.getContrast();
+    uint8_t origBright = bright;
+    uint8_t origContrast = contrast;
+    bool redraw = 1;
     while(1) {
       int encValue;
       if (redraw) {
@@ -765,13 +772,13 @@ unsigned long cfgValveProfile (char sTitle[], unsigned long defValue) {
   Glues together menu, Encoder and LCD objects
 */
 
-byte scrollMenu(char sTitle[], menu *objMenu) {
+uint8_t scrollMenu(char sTitle[], menu *objMenu) {
   inMenu++;
   Encoder.setMin(0);
   Encoder.setMax(objMenu->getItemCount() - 1);
   //Force refresh in case selected value was set
   Encoder.setCount(objMenu->getSelected());
-  boolean redraw = 1;
+  bool redraw = 1;
   
   while(1) {
     int encValue;
@@ -780,7 +787,7 @@ byte scrollMenu(char sTitle[], menu *objMenu) {
     if (encValue >= 0) {
       objMenu->setSelected(Encoder.getCount());
       if (objMenu->refreshDisp() || redraw) drawMenu(sTitle, objMenu);
-      for (byte i = 0; i < 3; i++) LCD.print(i + 1, 0, " ");
+      for (uint8_t i = 0; i < 3; i++) LCD.print(i + 1, 0, " ");
       LCD.print(objMenu->getCursor() + 1, 0, ">");
     }
     redraw = 0;
@@ -800,21 +807,21 @@ void drawMenu(char sTitle[], menu *objMenu) {
   LCD.clear();
   if (sTitle != NULL) LCD.print(0, 0, sTitle);
 
-  for (byte i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 3; i++) {
     objMenu->getVisibleRow(i, buf);
     LCD.print(i + 1, 1, buf);
   }
   LCD.print(objMenu->getCursor() + 1, 0, ">");
 }
 
-byte getChoice(menu *objMenu, byte iRow) {
+uint8_t getChoice(menu *objMenu, uint8_t iRow) {
   inMenu++;
   LCD.print_P(iRow, 0, PSTR(">"));
   LCD.print_P(iRow, 19, PSTR("<"));
   Encoder.setMin(0);
   Encoder.setMax(objMenu->getItemCount() - 1);
   Encoder.setCount(0);
-  boolean redraw = 1;
+  bool redraw = 1;
   
   while(1) {
     int encValue;
@@ -842,14 +849,14 @@ byte getChoice(menu *objMenu, byte iRow) {
   }
 }
 
-boolean confirmChoice(const char *choice, byte row) {
+bool confirmChoice(const char *choice, uint8_t row) {
   menu choiceMenu(1, 2);
   choiceMenu.setItem_P(CANCEL, 0);
   choiceMenu.setItem_P(choice, 1);
   if(getChoice(&choiceMenu, row) == 1) return 1; else return 0;
 }
 
-boolean confirmAbort() {
+bool confirmAbort() {
   LCD.clear();
   LCD.print_P(0, 0, PSTR("Abort operation and"));
   LCD.print_P(1, 0, PSTR("reset setpoints,"));
@@ -857,31 +864,31 @@ boolean confirmAbort() {
   return confirmChoice(PSTR("Reset"), 3);
 }
 
-boolean confirmDel() {
+bool confirmDel() {
   LCD.clear();
   LCD.print_P(1, 0, PSTR("Delete Item?"));
   return confirmChoice(PSTR("Delete"), 3);
 }
 
-long getValue_P(const char *sTitle, long defValue, byte precision, long minValue, long maxValue, const char *dispUnit) {
+long getValue_P(const char *sTitle, long defValue, uint8_t precision, long minValue, long maxValue, const char *dispUnit) {
   char title[20];
   strcpy_P(title, sTitle);
   return getValue(title, defValue, precision, minValue, maxValue, dispUnit);
 }
 
-long getValue(char sTitle[], long defValue, byte precision, long minValue, long maxValue, const char *dispUnit) {
+long getValue(char sTitle[], long defValue, uint8_t precision, long minValue, long maxValue, const char *dispUnit) {
   long retValue = constrain(defValue, minValue, maxValue);
-  byte cursorPos = 0; 
-  boolean cursorState = 0; //0 = Unselected, 1 = Selected
+  uint8_t cursorPos = 0;
+  bool cursorState = 0; //0 = Unselected, 1 = Selected
   char strValue[12];
-  boolean sign;
+  bool sign;
   
   inMenu++;
   sign = (minValue < 0 ? 1 : 0);
   unsigned int mult = pow10(precision);
   long bigVal = max(abs(minValue), maxValue);
   ltoa(bigVal/mult, strValue, 10);
-  byte digits = strlen(strValue) + precision;
+  uint8_t digits = strlen(strValue) + precision;
   if (sign) digits++;
 
   Encoder.setMin(0);
@@ -892,12 +899,12 @@ long getValue(char sTitle[], long defValue, byte precision, long minValue, long 
   LCD.setCustChar_P(1, CHARCURSOR);
   LCD.setCustChar_P(2, CHARSEL);
   
-  byte fieldStart = (20 - digits + 1) / 2;
+  uint8_t fieldStart = (20 - digits + 1) / 2;
   LCD.clear();
   LCD.print(0, 0, sTitle);
   LCD.print_P(1, fieldStart + digits + 1, dispUnit);
   LCD.print_P(3, 9, OK);
-  boolean redraw = 1;
+  bool redraw = 1;
 
   while(1) {
     int encValue;
@@ -924,8 +931,8 @@ long getValue(char sTitle[], long defValue, byte precision, long minValue, long 
         retValue = constrain(retValue, minValue, maxValue);
       } else {
         cursorPos = encValue;
-        for (byte i = fieldStart - 1; i < fieldStart - 1 + digits - precision; i++) LCD.writeCustChar(2, i, 0);
-        if (precision) for (byte i = fieldStart + digits - precision; i < fieldStart + digits; i++) LCD.writeCustChar(2, i, 0);
+        for (uint8_t i = fieldStart - 1; i < fieldStart - 1 + digits - precision; i++) LCD.writeCustChar(2, i, 0);
+        if (precision) for (uint8_t i = fieldStart + digits - precision; i < fieldStart + digits; i++) LCD.writeCustChar(2, i, 0);
         LCD.print(3, 8, " ");
         LCD.print(3, 11, " ");
         if (cursorPos == digits) {
@@ -983,11 +990,11 @@ long getValue(char sTitle[], long defValue, byte precision, long minValue, long 
   return retValue;
 }
 
-int getTimerValue(const char *sTitle, int defMins, byte maxHours) {
-  byte hours = defMins / 60;
-  byte mins = defMins - hours * 60;
-  byte cursorPos = 0; //0 = Hours, 1 = Mins, 2 = OK
-  boolean cursorState = 0; //0 = Unselected, 1 = Selected
+int getTimerValue(const char *sTitle, int defMins, uint8_t maxHours) {
+  uint8_t hours = defMins / 60;
+  uint8_t mins = defMins - hours * 60;
+  uint8_t cursorPos = 0; //0 = Hours, 1 = Mins, 2 = OK
+  bool cursorState = 0; //0 = Unselected, 1 = Selected
   Encoder.setMin(0);
   Encoder.setMax(2);
   Encoder.setCount(0);
@@ -997,7 +1004,7 @@ int getTimerValue(const char *sTitle, int defMins, byte maxHours) {
   LCD.print(1, 7, "(hh:mm)");
   LCD.print(2, 10, ":");
   LCD.print_P(3, 9, OK);
-  boolean redraw = 1;
+  bool redraw = 1;
   int encValue;
  
   while(1) {
@@ -1060,21 +1067,21 @@ int getTimerValue(const char *sTitle, int defMins, byte maxHours) {
   }
 }
 
-void getString(const char *sTitle, char defValue[], byte chars) {
+void getString(const char *sTitle, char defValue[], uint8_t chars) {
   char retValue[20];
   strcpy(retValue, defValue);
   inMenu++;
   
   //Right-Pad with spaces
-  boolean doWipe = 0;
-  for (byte i = 0; i < chars; i++) {
+  bool doWipe = 0;
+  for (uint8_t i = 0; i < chars; i++) {
     if (retValue[i] < 32 || retValue[i] > 126) doWipe = 1;
     if (doWipe) retValue[i] = 32;
   }
   retValue[chars] = '\0';
   
-  byte cursorPos = 0; 
-  boolean cursorState = 0; //0 = Unselected, 1 = Selected
+  uint8_t cursorPos = 0;
+  bool cursorState = 0; //0 = Unselected, 1 = Selected
   Encoder.setMin(0);
   Encoder.setMax(chars);
   Encoder.setCount(0);
@@ -1087,7 +1094,7 @@ void getString(const char *sTitle, char defValue[], byte chars) {
   LCD.clear();
   LCD.print_P(0,0,sTitle);
   LCD.print_P(3, 9, OK);
-  boolean redraw = 1;
+  bool redraw = 1;
   while(1) {
     int encValue;
     if (redraw) {
@@ -1100,7 +1107,7 @@ void getString(const char *sTitle, char defValue[], byte chars) {
         retValue[cursorPos] = enc2ASCII(encValue);
       } else {
         cursorPos = encValue;
-        for (byte i = (20 - chars + 1) / 2 - 1; i < (20 - chars + 1) / 2 - 1 + chars; i++) LCD.writeCustChar(2, i, 0);
+        for (uint8_t i = (20 - chars + 1) / 2 - 1; i < (20 - chars + 1) / 2 - 1 + chars; i++) LCD.writeCustChar(2, i, 0);
         LCD.print(3, 8, " ");
         LCD.print(3, 11, " ");
         if (cursorPos == chars) {
@@ -1142,7 +1149,7 @@ void getString(const char *sTitle, char defValue[], byte chars) {
 }
 
 //Next two functions used to change order of charactor scroll to (space), A-Z, a-z, 0-9, symbols
-byte ASCII2enc(byte charin) {
+uint8_t ASCII2enc(uint8_t charin) {
   if (charin == 32) return 0;
   else if (charin >= 65 && charin <= 90) return charin - 64;
   else if (charin >= 97 && charin <= 122) return charin - 70;
@@ -1153,7 +1160,7 @@ byte ASCII2enc(byte charin) {
   else if (charin >= 123 && charin <= 126) return charin - 32;
 }
 
-byte enc2ASCII(byte charin) {
+uint8_t enc2ASCII(uint8_t charin) {
   if (charin == 0) return 32;
   else if (charin >= 1 && charin <= 26) return charin + 64;  //Scan uper case alphabet
   else if (charin >= 27 && charin <= 52) return charin + 70; //Scan lower case alphabet

@@ -193,7 +193,7 @@ void setZoneName(uint8_t zone, char name[]) {
 //*****************************************************************************************************************************
 // Check/Update/Format EEPROM
 //*****************************************************************************************************************************
-boolean checkConfig() {
+bool checkConfig() {
   uint8_t cfgVersion = EEPROM.read(2047);
   uint8_t BTFinger = EEPROM.read(2046);
 

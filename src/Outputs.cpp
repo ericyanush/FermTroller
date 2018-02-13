@@ -31,6 +31,7 @@ Documentation, Forums and more information available at http://www.brewtroller.c
 #include "PVOut.h"
 #include "FermTroller.h"
 #include "Outputs.h"
+#include "Events.h"
 
 // set what the PID cycle time should be based on how fast the temp sensors will respond
 #if TS_ONEWIRE_RES == 12
@@ -134,7 +135,7 @@ void processOutputs() {
 }
 
 unsigned long prevHeats, prevCools;
-boolean prevBuzz;
+bool prevBuzz;
 
 void updateValves() {
   if (actHeats != prevHeats || actCools != prevCools || buzzStatus != prevBuzz) {
@@ -155,14 +156,14 @@ unsigned long computeValveBits() {
   return vlvBits;
 }
 
-boolean vlvConfigIsActive(byte profile) {
+bool vlvConfigIsActive(byte profile) {
   //An empty valve profile cannot be active
   if (!vlvConfig[profile]) return 0;
   if (profile < NUM_ZONES) return bitRead(actHeats, profile);
   else return bitRead(actCools, profile);
 }
 
-boolean isAlarmAllZones() {
+bool isAlarmAllZones() {
   for (byte zone = 0; zone < NUM_ZONES; zone++) if (alarmStatus[zone]) return 1;
   return 0;
 }
@@ -182,7 +183,7 @@ void updateAlarm() {
 //This function allow to modulate the sound of the buzzer when the alarm is ON. 
 //The modulation varies according the custom parameters.
 //The modulation occurs when the buzzerCycleTime value is larger than the buzzerOnDuration
-void setBuzzer(boolean alarmON) {
+void setBuzzer(bool alarmON) {
   if (alarmON) {
     #ifdef BUZZER_CYCLE_TIME
       //Alarm status is ON, Buzzer will go ON or OFF based on modulation.

@@ -9,6 +9,7 @@ set(SOURCE_FILES
         Eeprom.h
         Eeprom.cpp
         Enum.h
+        Events.h
         Events.cpp
         FermCore.h
         FermCore.cpp
@@ -23,6 +24,7 @@ set(SOURCE_FILES
         UI.h
         UI.cpp
         UI_LCD.h
+        Util.h
         Util.cpp)
 
 execute_process(COMMAND git describe --tags --abbrev=0

@@ -24,10 +24,15 @@ Hardware Lead: Jeremiah Dillingham (jeremiah_AT_brewtroller_DOT_com)
 Documentation, Forums and more information available at http://www.brewtroller.com
 */
 
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <Arduino.h>
 #include "Config.h"
 #include "Enum.h"
+#include "Util.h"
 
-void strLPad(char retString[], byte len, char pad) {
+void strLPad(char retString[], uint8_t len, char pad) {
   char strVal[len + 1];
   strcpy(strVal, retString);
   memset(retString, pad, len);
@@ -36,7 +41,7 @@ void strLPad(char retString[], byte len, char pad) {
 }
 
 //Converts a "Virtual Float" (fixed decimal value represented in tenths, hundredths, thousandths, etc.) to a string
-void vftoa(long val, char retStr[], byte precision, boolean decimal) {
+void vftoa(long val, char retStr[], uint8_t precision, bool decimal) {
   char lbuf[12] = "";
   ltoa(val, lbuf, 10);
   int wholeDigits = strlen(lbuf) - precision;
@@ -51,13 +56,13 @@ void vftoa(long val, char retStr[], byte precision, boolean decimal) {
 }
 
 //Truncate a string representation of a float to (length) chars but do not end string with a decimal point
-void truncFloat(char retStr[], byte len) {
+void truncFloat(char retStr[], uint8_t len) {
   retStr[len] = '\0';
   if (retStr[len - 1] == '.') retStr[len - 1] = '\0';
 }
 
-unsigned long pow10(byte power) {
+unsigned long pow10(uint8_t power) {
   unsigned long retValue = 1;
-  for (byte i = 0; i < power; i++) retValue *= 10;
+  for (uint8_t i = 0; i < power; i++) retValue *= 10;
   return retValue;
 }

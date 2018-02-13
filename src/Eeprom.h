@@ -1,6 +1,8 @@
 #ifndef EEPROM_FERMTROLLER_H
 #define EEPROM_FERMTROLLER_H
 
+void loadSetup();
+
 void loadVlvConfigs();
 void setTSAddr(uint8_t zone, uint8_t addr[8]);
 void setHysteresis(uint8_t output, uint8_t value);
@@ -14,6 +16,7 @@ void setValveCfg(uint8_t profile, unsigned long value);
 char* getZoneName(uint8_t zone, char name[]);
 void setZoneName(uint8_t zone, char name[]);
 
+bool checkConfig();
 void initEEPROM();
 
 long PROMreadLong(int address);

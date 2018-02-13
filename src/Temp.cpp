@@ -132,9 +132,9 @@ void convertAll() {
         ds.reset_search();
         return;
       }
-      boolean found = 0;
+      bool found = 0;
       for (byte i = 0; i < NUM_ZONES; i++) {
-        boolean match = 1;
+        bool match = 1;
         for (byte j = 0; j < 8; j++) {
           //Try to confirm a match by checking every byte of the scanned address with those of each sensor.
           if (scanAddr[j] != tSensor[i][j]) {
