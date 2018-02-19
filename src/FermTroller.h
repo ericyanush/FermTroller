@@ -19,7 +19,7 @@
     extern pin hbPin;
 #endif
 
-void softReset();
+const extern void(* softReset) (void);
 
 extern uint8_t tSensor[NUM_ZONES][8];
 extern int temp[NUM_ZONES];
@@ -52,7 +52,7 @@ extern bool logData;
 
 extern const char BT[];
 extern const char BTVER[];
-extern unsigned BUILD;
+extern const unsigned BUILD;
 
 //Log Strings
 extern const char LOGCMD[];

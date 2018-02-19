@@ -45,11 +45,7 @@ Compiled on Arduino-0022 (http://arduino.cc/en/Main/Software)
 #include <pin.h>
 #include <menu.h>
 
-#include "Config.h"
-#include "Enum.h"
-#include "HWProfile.h"
-#include "PVOut.h"
-#include "UI_LCD.h"
+#include "FermTroller.h"
 #include "Com.h"
 #include "Outputs.h"
 #include "Temp.h"
@@ -57,7 +53,7 @@ Compiled on Arduino-0022 (http://arduino.cc/en/Main/Software)
 #include "UI.h"
 #include "FermCore.h"
 
-void(* softReset) (void) = 0;
+const void(* softReset) (void) = 0;
 
 //**********************************************************************************
 // Compile Time Logic
