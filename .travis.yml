@@ -2,20 +2,11 @@ os: linux
 dist: trusty
 language: c
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-7
-
 git:
   submodules: false
 
-env:
-  global:
-    - CC=gcc-7
-    - CXX=g++-7
+before_install:
+  - git submodule update --init --recursive
 
 before_script:
   - mkdir -p tests/build
