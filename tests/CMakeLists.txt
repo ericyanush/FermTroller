@@ -6,9 +6,9 @@ set(TEST_TARGET fermtrollerTests)
 add_subdirectory(googletest)
 
 #List all test sources
-set(FT_TEST_SRCS src/main.cpp)
+set(FT_TEST_SRCS src/main.cpp src/MuxActuatorsTests.cpp)
 
-#Include the BrewTroller headers
+#Include the Fermtroller headers
 include_directories(../include)
 
 #Include the test dummy headers

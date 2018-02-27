@@ -28,34 +28,28 @@ namespace Bedrock {
             output = 0b1
         };
 
+        template <typename derived>
         class GPIOPin {
-        private:
-            GPIOPortProvider port;
-            uint8_t pin;
         public:
-            GPIOPin(GPIOPortProvider port, uint8_t pin) :
-                    port(port), pin(pin) {}
 
             void setMode(PinMode mode) {
-                //clear the current config
-                port().DDR &= ~(0b1 << pin);
-                port().DDR |= (static_cast<uint8_t>(mode) << pin);
+                static_cast<derived*>(this)->setMode();
             }
 
             PinMode getMode() {
-                return static_cast<PinMode>((port().DDR >> pin) & 0b1);
+                return static_cast<derived*>(this)->getMode();
             }
 
             void on() {
-                port().PORT |= (1 << pin);
+                static_cast<derived*>(this)->on();
             }
 
             void off() {
-                port().PORT &= ~(1 << pin);
+                static_cast<derived*>(this)->off();
             }
 
             void toggle() {
-                port().PORT ^= (1 << pin);
+                static_cast<derived*>(this)->toggle();
             }
         };
     };

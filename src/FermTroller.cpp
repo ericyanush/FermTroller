@@ -3,21 +3,19 @@
 //
 
 #include <util/delay.h>
+#include <AVRGPIOPin.hpp>
 #include "Processor.hpp"
-#include "GPIO.hpp"
 
-void init();
 
 int main() {
-    using Pin = Bedrock::GPIO::GPIOPin;
     using PinMode = Bedrock::GPIO::PinMode;
 
-    Pin b(Processor::GPIOPort::B, 0);
+    auto b = AVRGPIOPin(Processor::GPIOPort::B, 0);
     b.setMode(PinMode::output);
 
     while(true) {
         b.on();
-        _delay_ms(500);
+        _delay_ms(800);
         b.off();
         _delay_ms(100);
     }

@@ -18,9 +18,10 @@ include(avr_toolchain.cmake)
 project(FermTroller)
 
 # Set Compiler flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcall-prologues -fno-inline-small-functions -fno-split-wide-types -fshort-enums -Wall -Wextra -funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -Os")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcall-prologues -fno-inline-small-functions -fno-split-wide-types -fshort-enums -Wall -Wextra -Wno-switch -Wno-return-type -Wno-maybe-uninitialized -Wno-sequence-point -funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -std=c++14 -fno-exceptions -Os")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto -mcall-prologues -fno-split-wide-types -fshort-enums -Wall -Wextra -funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -Os")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -mcall-prologues -fno-split-wide-types -fshort-enums -Wall -Wextra -Wno-switch -Wno-return-type -Wno-maybe-uninitialized -Wno-sequence-point -funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -std=c++14 -fno-exceptions -Os")
 
 add_definitions("-DF_CPU=${MCU_SPEED}")
 
+add_subdirectory(tests EXCLUDE_FROM_ALL)
 add_subdirectory(src)
