@@ -2,6 +2,9 @@ os: linux
 dist: trusty
 language: c
 
+compiler:
+  - clang
+
 git:
   submodules: false
 
@@ -15,4 +18,4 @@ before_script:
 script:
   - cmake ../
   - make
-  - ./fermTrollerTests
+  - ./fermtrollerTests
