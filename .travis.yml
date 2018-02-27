@@ -1,0 +1,31 @@
+os: linux
+dist: trusty
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+
+git:
+    submodules: false
+
+before_install:
+    - git submodule update --init --recursive
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq clang-3.6 cmake
+
+env:
+    global:
+        - CC=gcc-7
+        - CXX=g++-7
+
+before_script:
+    - mkdir -p tests/build
+    - cd tests/build
+
+script:
+    - cmake ../
+    - make
+    - ./fermTrollerTests
